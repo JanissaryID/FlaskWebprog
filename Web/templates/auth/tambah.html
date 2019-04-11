@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Tambah Barang{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="kode">Kode Barang</label>
+    <input name="kode" id="username" required maxlength="5" minlength="5">
+    <label for="nama">Nama Barang</label>
+    <input name="nama" id="username" required minlength="3">
+    <label for="satuan">Satuan Barang</label>
+    <input name="satuan" id="username" required type="number">
+    <label for="harga">Harga Barang</label>
+    <input name="harga" id="username" required type="number" minlength="4">
+    <label for="merk">Merk Barang</label>
+    <input name="merk" id="username" required minlength="6">
+    <label for="gambar">Gambar Barang</label>
+    <input name="gambar" id="username" required type="file" multiple accept="image/*">
+    <input type="submit" value="Tambah">
+  </form>
+{% endblock %}

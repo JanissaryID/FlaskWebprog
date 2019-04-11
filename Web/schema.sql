@@ -14,6 +14,7 @@ CREATE TABLE Barang (
     namaBarang  CHAR (30)    NOT NULL,
     satuan      INTEGER (5)  NOT NULL,
     hargaSatuan INTEGER (20) NOT NULL,
+    Tanggal     CHAR (20)    NOT NULL,
     Merk        CHAR (30)    NOT NULL,
     gambar      CHAR (100)   NOT NULL
 );

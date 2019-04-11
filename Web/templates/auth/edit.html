@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Ubah Barang{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="kode">Kode Barang</label>
+    <input name="kode" id="username" required maxlength="5" minlength="5" readonly value=" {{data[0]}} ">
+
+    <label for="nama">Nama Barang</label>
+    <input name="nama" id="username" required minlength="3" value=" {{data[1]}} ">
+
+    <label for="satuan">Satuan Barang</label>
+    <input name="satuan" id="username" required value=" {{data[2]}} ">
+    <label for="harga">Harga Barang</label>
+    <input name="harga" id="username" required minlength="4" value=" {{data[3]}} ">
+    <label for="merk">Merk Barang</label>
+    <input name="merk" id="username" required minlength="6" value=" {{data[4]}} ">
+    <label for="gambar">Gambar Barang</label>
+    <img class="gmbr" src="../../static/images/{{data[5]}}" alt="">
+    <input name="gambar" id="username" type="file" multiple accept="image/*" value=" {{data[5]}} ">
+    <input type="submit" value="Ubah">
+    <br>
+    <a href="http://127.0.0.1:5000/auth/hapus/{{data[0]}}">Hapus Barang</a>
+  </form>
+{% endblock %}

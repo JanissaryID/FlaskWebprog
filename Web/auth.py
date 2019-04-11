@@ -1,4 +1,5 @@
 import functools
+import datetime as dt
 
 from flask import (
     Blueprint , flash , g , redirect , render_template , request , session , url_for
@@ -6,8 +7,12 @@ from flask import (
 from werkzeug.security import check_password_hash , generate_password_hash
 
 from Web.db import get_db
+# from . import warehouse
 
 bp = Blueprint ( 'auth' , __name__ , url_prefix = '/auth' )
+tgl = dt.date.isoformat(dt.date.today())
+thn = tgl[2:4]
+bln = tgl[5:7]
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
@@ -57,7 +62,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('auth.barang'))
 
         flash(error)
 
@@ -74,6 +79,70 @@ def load_logged_in_user():
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
+@bp.route('/barang', methods=('GET', 'POST'))
+def barang():
+    db = get_db()
+    brng = db.execute('SELECT * FROM Barang')
+    # db.commit()
+    return render_template('auth/barang.html',container = brng )
+
+@bp.route('/hapus/<ide>', methods=('GET', 'POST'))
+def Hapus(ide):
+    db = get_db()
+    db.execute('DELETE FROM Barang WHERE kodeBarang=?',(ide,))
+    db.commit()
+    return redirect(url_for('auth.barang'))
+
+    
+
+
+@bp.route('/tambah', methods=('GET', 'POST'))
+def tambah():
+    if request.method == 'POST':
+        kode = request.form['kode']
+        nama = request.form['nama']
+        satuan = request.form['satuan']
+        harga = request.form['harga']
+        bukti = 'M'+thn+'/'+bln+'/'+'001'
+        merk = request.form['merk']
+        gambar = request.form['gambar']
+        db = get_db()
+        error = None
+        if error is None:
+            db.execute(
+                'INSERT INTO Barang (kodeBarang,namaBarang,satuan,hargaSatuan,Tanggal,Merk,gambar) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (kode, nama, satuan, harga,bukti ,merk, gambar)
+            )
+            db.commit()
+            return redirect(url_for('auth.barang'))
+
+        flash(error)
+
+    return render_template('auth/tambah.html')
+
+@bp.route('/ubah/<ide>', methods=('GET', 'POST'))
+def ubah(ide):
+    db = get_db()
+    brng = db.execute('SELECT * FROM Barang WHERE kodeBarang=?',(ide,)).fetchone()
+
+    if request.method == 'POST':
+        kode = request.form['kode']
+        nama = request.form['nama']
+        satuan = int(request.form['satuan'])
+        harga = int(request.form['harga'])
+        merk = request.form['merk']
+        gambar = request.form['gambar']
+        db = get_db()
+        error = None
+        if error is None:
+            db.execute(''' UPDATE Barang SET namaBarang = ?,satuan = ?,hargaSatuan = ?,Merk =?,gambar =? WHERE kodeBarang = ? ''',(nama,satuan,harga,merk,gambar,ide))
+            db.commit()
+            return redirect(url_for('auth.barang'))
+
+        flash(error)
+
+    return render_template('auth/edit.html', data = brng)
+
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -83,7 +152,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('warehouse.index'))
 
         return view(**kwargs)
 

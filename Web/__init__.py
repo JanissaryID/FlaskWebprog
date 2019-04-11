@@ -22,12 +22,17 @@ def create_app(test_config = None):
     
     @app.route('/')
     def hello():
-        return redirect(url_for('auth.login'))
+            auth.logout()
+            return redirect(url_for('auth.login'))
 
     from . import db
     db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import warehouse
+    app.register_blueprint(warehouse.bp)
+    app.add_url_rule('/',endpoint='index')
 
     return app
