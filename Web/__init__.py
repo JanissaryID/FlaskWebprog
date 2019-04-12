@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, redirect,url_for
+from flask_qrcode import QRcode
 
 def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config=True)

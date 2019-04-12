@@ -1,5 +1,8 @@
 import functools
 import datetime as dt
+from flask_qrcode import QRcode
+import pyqrcode
+import os, shutil
 
 from flask import (
     Blueprint , flash , g , redirect , render_template , request , session , url_for
@@ -8,6 +11,8 @@ from werkzeug.security import check_password_hash , generate_password_hash
 
 from Web.db import get_db
 # from . import warehouse
+
+dirbase = os.path.abspath(os.path.dirname(__file__))
 
 bp = Blueprint ( 'auth' , __name__ , url_prefix = '/auth' )
 tgl = dt.date.isoformat(dt.date.today())
@@ -104,18 +109,28 @@ def Hapus(ide):
 def tambah():
     if request.method == 'POST':
         kode = request.form['kode']
+        qrc = pyqrcode.create(kode)
+        qrcd = kode+'.svg'
+        qrc.svg(qrcd,scale=7)
+        cwd = os.getcwd()
+        print(cwd+'\lol.svg')
+        shutil.move(cwd+'/'+qrcd,cwd+'/Web/static/images/'+qrcd ) 
+        print('QRCODE generated')
         nama = request.form['nama']
         satuan = request.form['satuan']
         harga = request.form['harga']
-        bukti = 'M'+thn+'/'+bln+'/'+'001'
+        db = get_db()
+        jmbl = db.execute("SELECT COUNT(*) FROM Barang").fetchone()
+        bukti = 'M'+thn+'/'+bln+'/'+kode
+        # bukti = jmbl
         merk = request.form['merk']
         gambar = request.form['gambar']
         db = get_db()
         error = None
         if error is None:
             db.execute(
-                'INSERT INTO Barang (kodeBarang,namaBarang,satuan,hargaSatuan,Tanggal,Merk,gambar) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                (kode, nama, satuan, harga,bukti ,merk, gambar)
+                'INSERT INTO Barang (kodeBarang,namaBarang,satuan,hargaSatuan,Tanggal,Merk,gambar,Qrcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                (kode, nama, satuan, harga,bukti ,merk, gambar,qrcd)
             )
             db.commit()
             return redirect(url_for('auth.barang'))

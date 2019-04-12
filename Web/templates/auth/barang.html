@@ -16,6 +16,7 @@
   {% if g.user %}
     <nav>
       <ul>
+        <li><input name="cari" id="username" placeholder="Cari barang"></li>
         <li><a class="action" href="{{ url_for('auth.tambah') }}">Tambah Barang</a></li>
         <li><a class="action" href="{{ url_for('auth.ambilbarang') }}">Ambil Barang</a></li>
         <!-- <li><a class="action" href="#">Edit</a></li>
@@ -35,6 +36,7 @@
           <th width=60>Bukti</th>
           <th width=60>Merek</th>
           <th width=60>Gambar</th>
+          <th width=60>QRcode</th>
         </tr>
         {% for data in container %}
         <tr>
@@ -46,6 +48,7 @@
           <td>{{data[4]}}</td>
           <td>{{data[5]}}</td>
           <td class="gambar"><img src="../../static/images/{{data[6]}}" alt=""></td>
+          <td class="gambar"><img src="../../static/images/{{data[7]}}" alt=""></td>
         </tr>
         {% endfor %}
 {% endblock %}

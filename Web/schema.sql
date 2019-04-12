@@ -16,5 +16,6 @@ CREATE TABLE Barang (
     hargaSatuan INTEGER (20) NOT NULL,
     Tanggal     CHAR (20)    NOT NULL,
     Merk        CHAR (30)    NOT NULL,
-    gambar      CHAR (100)   NOT NULL
+    gambar      CHAR (100)   NOT NULL,
+    Qrcode      STRING (100) NOT NULL
 );

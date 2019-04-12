@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
+{% block navigasi %}
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.barang') }}">Inventoy</a>
+      <li><a href="{{ url_for('auth.about') }}">About</a>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% else %}
+      <li><a href="{{ url_for('auth.register') }}">Register</a>
+      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+    {% endif %}
+{% endblock %}
+
 {% block header %}
   <h1>{% block title %}Ubah Barang{% endblock %}</h1>
 {% endblock %}
@@ -19,8 +31,8 @@
     <label for="merk">Merk Barang</label>
     <input name="merk" id="username" required minlength="6" value=" {{data[4]}} ">
     <label for="gambar">Gambar Barang</label>
-    <img class="gmbr" src="../../static/images/{{data[5]}}" alt="">
-    <input name="gambar" id="username" type="file" multiple accept="image/*" value=" {{data[5]}} ">
+    <img class="gmbr" src="../../static/images/{{data[6]}}" alt="">
+    <input name="gambar" id="username" type="file" multiple accept="image/*" value=" {{data[6]}} ">
     <input type="submit" value="Ubah">
     <br>
     <a href="http://127.0.0.1:5000/auth/hapus/{{data[0]}}">Hapus Barang</a>
