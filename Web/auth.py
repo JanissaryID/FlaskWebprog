@@ -62,7 +62,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('auth.barang'))
+            return redirect(url_for('auth.Home'))
 
         flash(error)
 
@@ -86,15 +86,19 @@ def barang():
     # db.commit()
     return render_template('auth/barang.html',container = brng )
 
+@bp.route('/ambilBarang',methods=('GET', 'POST'))
+def ambilbarang():
+    db = get_db()
+    brng = db.execute('SELECT * FROM Barang')
+    # db.commit()
+    return render_template('auth/ambilbarang.html',container = brng )
+
 @bp.route('/hapus/<ide>', methods=('GET', 'POST'))
 def Hapus(ide):
     db = get_db()
     db.execute('DELETE FROM Barang WHERE kodeBarang=?',(ide,))
     db.commit()
     return redirect(url_for('auth.barang'))
-
-    
-
 
 @bp.route('/tambah', methods=('GET', 'POST'))
 def tambah():
@@ -142,6 +146,14 @@ def ubah(ide):
         flash(error)
 
     return render_template('auth/edit.html', data = brng)
+
+@bp.route('/home')
+def Home():
+    return render_template('auth/Home.html')
+
+@bp.route('/about')
+def about():
+    return render_template('auth/about.html')
 
 @bp.route('/logout')
 def logout():

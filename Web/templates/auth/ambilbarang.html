@@ -12,12 +12,10 @@
 {% endblock %}
 
 {% block header %}
-  <h1>{% block title %}Barang{% endblock %}</h1>
+  <h1>{% block title %}Ambil Barang{% endblock %}</h1>
   {% if g.user %}
     <nav>
       <ul>
-        <li><a class="action" href="{{ url_for('auth.tambah') }}">Tambah Barang</a></li>
-        <li><a class="action" href="{{ url_for('auth.ambilbarang') }}">Ambil Barang</a></li>
         <!-- <li><a class="action" href="#">Edit</a></li>
         <li><a class="action" href="#">Delete</a></li> -->
       </ul>
@@ -38,7 +36,6 @@
         </tr>
         {% for data in container %}
         <tr>
-          <!-- <td>{{data[0]}}</td> -->
           <td><a href="http://127.0.0.1:5000/auth/ubah/{{data[0]}}">{{data[0]}}</a></td>
           <td>{{data[1]}}</td>
           <td>{{data[2]}}</td>
